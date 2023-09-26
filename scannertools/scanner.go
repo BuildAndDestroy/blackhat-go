@@ -4,46 +4,8 @@ import (
 	"fmt"
 	"net"
 	"sort"
-	"strconv"
-	"strings"
 	"sync"
 )
-
-// func ConvertArrayPortsToInt(ports string) []int {
-func ConvertArrayPortsToInt(ports string) string {
-	if strings.Contains(ports, "-") {
-		fmt.Println(ports)
-		splitByDash := strings.Split(ports, "-")
-		first := splitByDash[0]
-		firstInt, err := strconv.Atoi(first)
-		if err != nil {
-			panic(err)
-		}
-
-		second := splitByDash[1]
-		secondInt, err := strconv.Atoi(second)
-
-		if err != nil {
-			panic(err)
-		}
-
-		var rangeTotal = secondInt - firstInt + 1
-		fmt.Println(rangeTotal)
-		// var rangeArray [rangeTotal]int
-
-		for index := firstInt; index <= secondInt; index++ {
-			fmt.Println(index)
-		}
-	}
-
-	return "yolo"
-	// if strings.Contains(ports, ",") {
-	// 	fmt.Println(ports)
-	// 	splitByComma := strings.Split(ports, ",")
-	// 	first := splitByComma[0]
-	// 	second := splitByComma[1]
-	// }
-}
 
 func SinglePort(host string, port int) {
 	fmt.Printf("[*] Single port scan for port %d\n", port)

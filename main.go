@@ -13,7 +13,7 @@ func main() {
 	// scannertools.WorkerPoolScanTwo(host)
 	scannertools.UserInputCheck()
 	// scannertools.TestUserInput()
-	gotheem := scannertools.ScannerUserInput()
-	portsInt := scannertools.ConvertArrayPortsToInt(gotheem["ports"])
+	userInput := scannertools.ScannerUserInput()
+	portsInt := scannertools.StringToIntPorts(userInput["ports"])
 	fmt.Println(portsInt)
 }
