@@ -1,13 +1,19 @@
 package main
 
 import (
-	"scannertools/scannertools"
+	"blackhat-go/scannertools"
+	"fmt"
 )
 
 func main() {
 	// host := "scanme.nmap.org"
-	host := "127.0.0.1"
+	// host := "127.0.0.1"
 	// go scannertools.SinglePort(host, 80)
 	// scannertools.TenTwentyFourPorts(host)
-	scannertools.WorkerPoolScanTwo(host)
+	// scannertools.WorkerPoolScanTwo(host)
+	scannertools.UserInputCheck()
+	// scannertools.TestUserInput()
+	userInput := scannertools.ScannerUserInput()
+	portsInt := scannertools.StringToIntPorts(userInput["ports"])
+	fmt.Println(portsInt)
 }

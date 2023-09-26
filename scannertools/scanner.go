@@ -10,7 +10,6 @@ import (
 func SinglePort(host string, port int) {
 	fmt.Printf("[*] Single port scan for port %d\n", port)
 	address := fmt.Sprintf("%s:%d", host, port)
-	// fmt.Println(address)
 	conn, err := net.Dial("tcp", address)
 	if err == nil {
 		message := fmt.Sprintf("Connection to %d successful!", port)
