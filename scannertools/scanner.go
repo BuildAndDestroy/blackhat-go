@@ -78,6 +78,7 @@ func WorkerPoolScan() {
 }
 
 func WorkerTwo(host string, ports, results chan int) {
+	// From the book, a worker function that scans a port
 	for p := range ports {
 		address := fmt.Sprintf("%s:%d", host, p)
 		conn, err := net.Dial("tcp", address)
@@ -91,6 +92,7 @@ func WorkerTwo(host string, ports, results chan int) {
 }
 
 func WorkerPoolScanTwo(host string) {
+	// From the book, worker pool that scans ports 1 to 1024 via channels.
 	ports := make(chan int, 100)
 	results := make(chan int)
 	var openports []int
@@ -105,6 +107,37 @@ func WorkerPoolScanTwo(host string) {
 	}()
 
 	for i := 0; i < 1024; i++ {
+		port := <-results
+		if port != 0 {
+			openports = append(openports, port)
+		}
+	}
+
+	close(ports)
+	close(results)
+	sort.Ints(openports)
+	for _, port := range openports {
+		fmt.Printf("%d open\n", port)
+	}
+}
+
+func WorkerPoolScanTwoPorts(host *string, userPorts *[]int) {
+	// From the book, just modified to accept user input of ports
+	// 100 buffer that will run buckets of ports.
+	ports := make(chan int, 100)
+	results := make(chan int)
+	var openports []int
+
+	for i := 0; i < cap(ports); i++ {
+		go WorkerTwo(*host, ports, results)
+	}
+	go func() {
+		for _, i := range *userPorts {
+			ports <- i
+		}
+	}()
+
+	for range *userPorts {
 		port := <-results
 		if port != 0 {
 			openports = append(openports, port)
