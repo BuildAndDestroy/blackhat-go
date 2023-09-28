@@ -33,15 +33,6 @@ func ScannerUserInput() map[string]string {
 	portPtr := flag.String("Port", "0", "Port, or ports, to scan.\nExamples:\n    22\n    1-1000\n    22,443")
 	flag.Parse()
 
-	// if len(*portPtr) == 1 {
-	// 	stringPortPtr := *portPtr
-	// 	stringPortToInt, err := strconv.Atoi(stringPortPtr)
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	// 	fmt.Println(stringPortToInt)
-	// }
-
 	userInputMap := make(map[string]string)
 	userInputMap["hostname"] = *hostPtr
 	userInputMap["ports"] = *portPtr

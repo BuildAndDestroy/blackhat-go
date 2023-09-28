@@ -5,22 +5,29 @@ import (
 	"strings"
 )
 
-func StringToIntPorts(ports string) []int {
+func StringToIntPorts(p *string) []int {
+	// func StringToIntPorts(ports string) []int {
 	// Switch case to find 3 types of ports:
 	// comma ","
 	// dash "-"
 	// Or just a single port.
+	ports := *p
 	switch {
+	// case strings.Contains(ports, "-"):
 	case strings.Contains(ports, "-"):
 		// fmt.Println("-")
+		// portsslice := ConvertArrayPortsToIntDash(ports)
 		portsslice := ConvertArrayPortsToIntDash(ports)
 		return portsslice
+	// case strings.Contains(ports, ","):
 	case strings.Contains(ports, ","):
 		// fmt.Println(",")
+		// portsslice := ConvertArrayPortsToIntComma(ports)
 		portsslice := ConvertArrayPortsToIntComma(ports)
 		return portsslice
 	default:
 		var ints []int
+		// portConvertToInt, err := strconv.Atoi(ports)
 		portConvertToInt, err := strconv.Atoi(ports)
 		if err != nil {
 			panic(err)

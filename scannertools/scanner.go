@@ -96,15 +96,52 @@ func WorkerPoolScanTwo(host string) {
 	var openports []int
 
 	for i := 0; i < cap(ports); i++ {
+		// fmt.Println(i)
 		go WorkerTwo(host, ports, results)
 	}
 	go func() {
 		for i := 1; i <= 1024; i++ {
+			// fmt.Println(i)
 			ports <- i
 		}
 	}()
 
 	for i := 0; i < 1024; i++ {
+		port := <-results
+		if port != 0 {
+			openports = append(openports, port)
+		}
+	}
+
+	close(ports)
+	close(results)
+	sort.Ints(openports)
+	for _, port := range openports {
+		fmt.Printf("%d open\n", port)
+	}
+}
+
+func WorkerPoolScanTwoPorts(host *string, userPorts *[]int) {
+	// chanLength := userPorts[len(userPorts) - 1] - userPorts[0]
+	// ports := make(chan int, chanLength)
+	ports := make(chan int, 100)
+	results := make(chan int)
+	var openports []int
+
+	for i := 0; i < cap(ports); i++ {
+		go WorkerTwo(*host, ports, results)
+	}
+	go func() {
+		for _, i := range *userPorts {
+			// fmt.Println(i)
+			// for i := 1; i <= 1024; i++ {
+			ports <- i
+		}
+	}()
+
+	for range *userPorts {
+		// for i := 0; i < 1024; i++ {
+		// fmt.Println(i)
 		port := <-results
 		if port != 0 {
 			openports = append(openports, port)
