@@ -2,13 +2,14 @@ package main
 
 import (
 	"blackhat-go/scannertools"
+	"fmt"
 )
 
 func main() {
 	// scannertools.UserInputCheck()
 	// scannertools.TestUserInput()
 	userInput := scannertools.UserCommands()
-	// fmt.Println(userInput)
+	fmt.Println(userInput)
 	// userInput := scannertools.ScannerUserInput()
 	userHost := userInput["hostname"]
 	userPorts := userInput["ports"]

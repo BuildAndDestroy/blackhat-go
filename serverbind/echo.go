@@ -1,14 +1,43 @@
 package serverbind
 
 import (
+	"bufio"
 	"io"
 	"log"
 	"net"
 	"strconv"
 )
 
-// echo is a handler function that simply echos received data.
+func copyEcho(conn net.Conn) {
+	// Copy data from io.Reader to io.Writer via io.Copy
+	defer conn.Close()
+
+	if _, err := io.Copy(conn, conn); err != nil {
+		log.Fatalln("Unable to read/write data.")
+	}
+}
+
+func bufioEcho(conn net.Conn) {
+	// buffEcho is a handler function that simply echos received data.
+	defer conn.Close()
+
+	reader := bufio.NewReader(conn)
+	s, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatalln("Unable to read data.")
+	}
+	log.Printf("Read %d bytes: %s", len(s), s)
+
+	log.Printf("Writing data.")
+	writer := bufio.NewWriter(conn)
+	if _, err := writer.WriteString(s); err != nil {
+		log.Fatalln("Unable to write data")
+	}
+	writer.Flush()
+}
+
 func echo(conn net.Conn) {
+	// echo is a handler function that simply echos received data.
 	defer conn.Close()
 
 	b := make([]byte, 512)
@@ -54,6 +83,7 @@ func BindServerPort() {
 			log.Fatalln("Unable to accept connection.")
 		}
 		// Handle the connection. Using goroutine for concurrency.
-		go echo(conn)
+		// go echo(conn)
+		go bufioEcho(conn)
 	}
 }
