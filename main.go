@@ -9,7 +9,7 @@ import (
 
 func main() {
 	userInput := scannertools.UserCommands()
-	log.Println(userInput)
+	// log.Println(userInput)
 	switch userInput["command"] {
 	case "Scanner":
 		scannertools.InitScanner(userInput)
