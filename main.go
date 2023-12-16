@@ -2,18 +2,23 @@ package main
 
 import (
 	"blackhat-go/scannertools"
-	"fmt"
+	"blackhat-go/serverbind"
+	"log"
+	"os"
 )
 
 func main() {
-	// scannertools.UserInputCheck()
-	// scannertools.TestUserInput()
 	userInput := scannertools.UserCommands()
-	fmt.Println(userInput)
-	// userInput := scannertools.ScannerUserInput()
-	userHost := userInput["hostname"]
-	userPorts := userInput["ports"]
-	portsInt := scannertools.StringToIntPorts(&userPorts)
-	scannertools.WorkerPoolScanTwoPorts(&userHost, &portsInt)
-	// serverbind.BindServerPort()
+	log.Println(userInput)
+	switch userInput["command"] {
+	case "Scanner":
+		scannertools.InitScanner(userInput)
+	case "Server":
+		serverbind.BindServerPort(userInput)
+	case "Client":
+		log.Println("Client")
+	default:
+		log.Fatalln("Correct Subcommand does not exit")
+		os.Exit(1)
+	}
 }
