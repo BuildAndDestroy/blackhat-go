@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 	"net"
-	"strconv"
 )
 
 func copyEcho(conn net.Conn) {
@@ -62,11 +61,11 @@ func echo(conn net.Conn) {
 	}
 }
 
-func BindServerPort() {
+func BindServerPort(mappedUserInput map[string]string) {
 	// Bind to TCP port 20080 on all interfaces.
 	var (
-		port         int    = 20080
-		stringPort   string = strconv.Itoa(port)
+		mappedPort   string = mappedUserInput["port"]
+		stringPort   string = mappedPort
 		listenerPort string = ":" + stringPort
 	)
 

@@ -38,6 +38,7 @@ func UserCommands() map[string]string {
 	var (
 		clientFlag         = flag.NewFlagSet(client, flag.ExitOnError)
 		serverFlag         = flag.NewFlagSet(server, flag.ExitOnError)
+		serverArgPort      = serverFlag.String("Port", "80", "Port to bind to on this server/client.\nExample:\n    80\n    1337")
 		scannerFlag        = flag.NewFlagSet(scanner, flag.ExitOnError)
 		scannerArgHostname = scannerFlag.String("Hostname", "127.0.0.1", "Hostname or IP we want to scan")
 		scannerArgPort     = scannerFlag.String("Port", "0", "Port, or ports, to scan.\nExamples:\n    22\n    1-1000\n    22,443")
@@ -56,14 +57,20 @@ func UserCommands() map[string]string {
 		switch command {
 
 		case scanner:
+			userInputMap["command"] = scanner
 			scannerFlag.Parse(os.Args[2:])
 			userInputMap["hostname"] = *scannerArgHostname
 			userInputMap["ports"] = *scannerArgPort
 			return userInputMap
 		case client:
+			userInputMap["command"] = client
 			clientFlag.Parse(os.Args[2:])
+			return userInputMap
 		case server:
+			userInputMap["command"] = server
 			serverFlag.Parse(os.Args[2:])
+			userInputMap["port"] = *serverArgPort
+			return userInputMap
 		default:
 			fmt.Println("Missing subcommands")
 			os.Exit(1)
