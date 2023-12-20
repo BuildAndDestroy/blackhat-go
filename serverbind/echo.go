@@ -62,7 +62,7 @@ func echo(conn net.Conn) {
 }
 
 func BindServerPort(mappedUserInput map[string]string) {
-	// Bind to TCP port 20080 on all interfaces.
+	// Bind to user specified TCP port on all interfaces.
 	var (
 		mappedPort   string = mappedUserInput["port"]
 		stringPort   string = mappedPort
@@ -83,6 +83,7 @@ func BindServerPort(mappedUserInput map[string]string) {
 		}
 		// Handle the connection. Using goroutine for concurrency.
 		// go echo(conn)
-		go bufioEcho(conn)
+		// go bufioEcho(conn)
+		go copyEcho(conn) // Much more stable
 	}
 }

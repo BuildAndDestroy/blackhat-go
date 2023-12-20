@@ -38,10 +38,10 @@ func UserCommands() map[string]string {
 	var (
 		clientFlag         = flag.NewFlagSet(client, flag.ExitOnError)
 		serverFlag         = flag.NewFlagSet(server, flag.ExitOnError)
-		serverArgPort      = serverFlag.String("Port", "80", "Port to bind to on this server/client.\nExample:\n    80\n    1337")
+		serverArgPort      = serverFlag.String("port", "8000", "Port to bind to on this server/client.\nExample:\n    8000\n    1337")
 		scannerFlag        = flag.NewFlagSet(scanner, flag.ExitOnError)
-		scannerArgHostname = scannerFlag.String("Hostname", "127.0.0.1", "Hostname or IP we want to scan")
-		scannerArgPort     = scannerFlag.String("Port", "0", "Port, or ports, to scan.\nExamples:\n    22\n    1-1000\n    22,443")
+		scannerArgHostname = scannerFlag.String("hostname", "127.0.0.1", "Hostname or IP we want to scan")
+		scannerArgPort     = scannerFlag.String("port", "0", "Port, or ports, to scan.\nExamples:\n    22\n    1-1000\n    22,443")
 	)
 
 	if len(os.Args) <= 2 {
