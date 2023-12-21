@@ -31,21 +31,26 @@ const (
 	client  string = "Client"
 	scanner string = "Scanner"
 	echo    string = "Echo"
+	proxy   string = "Proxy"
 )
 
 func UserCommands() map[string]string {
-	// Let the user choose between client, server, or scanner.
+	// Let the user choose between client, server, scanner, or proxy.
 	var (
 		clientFlag         = flag.NewFlagSet(client, flag.ExitOnError)
 		serverFlag         = flag.NewFlagSet(server, flag.ExitOnError)
+		proxyFlag          = flag.NewFlagSet(proxy, flag.ExitOnError)
 		serverArgPort      = serverFlag.String("port", "8000", "Port to bind to on this server/client.\nExample:\n    8000\n    1337")
 		scannerFlag        = flag.NewFlagSet(scanner, flag.ExitOnError)
-		scannerArgHostname = scannerFlag.String("hostname", "127.0.0.1", "Hostname or IP we want to scan")
+		scannerArgHostname = scannerFlag.String("host", "127.0.0.1", "Hostname or IP we want to scan")
 		scannerArgPort     = scannerFlag.String("port", "0", "Port, or ports, to scan.\nExamples:\n    22\n    1-1000\n    22,443")
+		proxyArgHost       = proxyFlag.String("target-host", "google.com", "Hostname to be our end target.")
+		proxyArgTargetPort = proxyFlag.String("target-port", "80", "Port to query on our end target host.")
+		proxyArgPort       = proxyFlag.String("port", "8000", "Port to bind to on this client.\nExample:\n    8000\n    1337")
 	)
 
 	if len(os.Args) <= 2 {
-		fmt.Println("Expected 'Client', 'Server', or 'Scanner' commands with a subcommand.")
+		fmt.Println("Expected 'Client', 'Server', 'Scanner', or 'Proxy' commands with a subcommand.")
 		os.Exit(1)
 	}
 
@@ -53,13 +58,13 @@ func UserCommands() map[string]string {
 
 	userInputMap := make(map[string]string)
 
-	if command == client || command == server || command == scanner {
+	if command == client || command == server || command == scanner || command == proxy {
 		switch command {
 
 		case scanner:
 			userInputMap["command"] = scanner
 			scannerFlag.Parse(os.Args[2:])
-			userInputMap["hostname"] = *scannerArgHostname
+			userInputMap["host"] = *scannerArgHostname
 			userInputMap["ports"] = *scannerArgPort
 			return userInputMap
 		case client:
@@ -71,12 +76,19 @@ func UserCommands() map[string]string {
 			serverFlag.Parse(os.Args[2:])
 			userInputMap["port"] = *serverArgPort
 			return userInputMap
+		case proxy:
+			userInputMap["command"] = proxy
+			proxyFlag.Parse(os.Args[2:])
+			userInputMap["target-host"] = *proxyArgHost
+			userInputMap["port"] = *proxyArgPort
+			userInputMap["target-port"] = *proxyArgTargetPort
+			return userInputMap
 		default:
 			fmt.Println("Missing subcommands")
 			os.Exit(1)
 		}
 	} else {
-		fmt.Println("Expected 'Client', 'Server', or 'Scanner' commands with a subcommand.")
+		fmt.Println("Expected 'Client', 'Server', 'Scanner', or 'Proxy' commands with a subcommand.")
 		os.Exit(1)
 	}
 	return userInputMap

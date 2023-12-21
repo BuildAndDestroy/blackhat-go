@@ -154,7 +154,7 @@ func WorkerPoolScanTwoPorts(host *string, userPorts *[]int) {
 
 func InitScanner(mappedUserInput map[string]string) {
 	// Initialize the scanner, begin scanning
-	userHost := mappedUserInput["hostname"]
+	userHost := mappedUserInput["host"]
 	userPorts := mappedUserInput["ports"]
 	portsInt := StringToIntPorts(&userPorts)
 	WorkerPoolScanTwoPorts(&userHost, &portsInt)

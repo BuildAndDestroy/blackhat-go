@@ -77,7 +77,7 @@ func BindServerPort(mappedUserInput map[string]string) {
 	for {
 		// Wait for connection. Create net.Conn on connection established.
 		conn, err := listener.Accept()
-		log.Println("Recieved connection!")
+		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
 		if err != nil {
 			log.Fatalln("Unable to accept connection.")
 		}
