@@ -23,8 +23,13 @@ func main() {
 	case "Proxy":
 		log.Println("[*] Initiating Proxy")
 		serverbind.ProxyForward(userInput)
+	case "Netcat":
+		if userInput["bind"] == "true" { // Garbage, need to convert to a struct to handle strings, bools, etc.
+			log.Println("[*] Binding shell spawning for remote code execution")
+			serverbind.NcBind(userInput)
+		}
 	default:
-		log.Fatalln("Correct Subcommand does not exit")
+		log.Fatalln("Subcommand does not exist")
 		os.Exit(1)
 	}
 }
