@@ -1,10 +1,12 @@
 package serverbind
 
 import (
+	"blackhat-go/scannertools"
 	"bufio"
 	"io"
 	"log"
 	"net"
+	"strconv"
 )
 
 func copyEcho(conn net.Conn) {
@@ -65,6 +67,36 @@ func BindServerPort(mappedUserInput map[string]string) {
 	// Bind to user specified TCP port on all interfaces.
 	var (
 		mappedPort   string = mappedUserInput["port"]
+		stringPort   string = mappedPort
+		listenerPort string = ":" + stringPort
+	)
+
+	listener, err := net.Listen("tcp", listenerPort)
+	if err != nil {
+		log.Fatalln("Unable to bind to port " + stringPort)
+	}
+	log.Println("Listening on port " + stringPort)
+	for {
+		// Wait for connection. Create net.Conn on connection established.
+		conn, err := listener.Accept()
+		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
+		if err != nil {
+			log.Fatalln("Unable to accept connection.")
+		}
+		// Handle the connection. Using goroutine for concurrency.
+		// go echo(conn)
+		// go bufioEcho(conn)
+		go copyEcho(conn) // Much more stable
+	}
+}
+
+type ServerBindUserInputServer struct {
+	scannertools.UserInputServer
+}
+
+func (uis *ServerBindUserInputServer) BindServerPortTwo() {
+	var (
+		mappedPort   string = strconv.Itoa(uis.Port)
 		stringPort   string = mappedPort
 		listenerPort string = ":" + stringPort
 	)
