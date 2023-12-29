@@ -9,12 +9,12 @@ import (
 var EXCEPTIONSTATEMENT string = "Expected 'Client', 'Server', 'Scanner', 'Proxy', or 'Netcat' commands with a subcommand."
 
 const (
-	server  string = "Server"
-	client  string = "Client"
-	scanner string = "Scanner"
-	echo    string = "Echo"
-	proxy   string = "Proxy"
-	netcat  string = "Netcat"
+	Server  string = "Server"
+	Client  string = "Client"
+	Scanner string = "Scanner"
+	Echo    string = "Echo"
+	Proxy   string = "Proxy"
+	Netcat  string = "Netcat"
 )
 
 func TestUserInput() {
@@ -38,51 +38,51 @@ func TestUserInput() {
 }
 
 type UserInputServer struct {
-	port int
+	Port int
 }
 
 func (uis *UserInputServer) SetFlagServer(fs *flag.FlagSet) {
-	fs.IntVar(&uis.port, "port", 8000, "Port to bind to on this server/client.\nExample:\n    8000\n    1337")
+	fs.IntVar(&uis.Port, "port", 8000, "Port to bind to on this server/client.\nExample:\n    8000\n    1337")
 }
 
 type UserInputClient struct {
-	host string
+	Host string
 }
 
 func (uic *UserInputClient) SetFlagClient(fs *flag.FlagSet) {
-	fs.StringVar(&uic.host, "host", "127.0.0.1", "Hostname or IP we want to connect.")
+	fs.StringVar(&uic.Host, "host", "127.0.0.1", "Hostname or IP we want to connect.")
 }
 
 type UserInputProxy struct {
-	targetHost string
-	targetPort int
-	port       int
+	TargetHost string
+	TargetPort int
+	Port       int
 }
 
 func (uip *UserInputProxy) SetFlagProxy(fs *flag.FlagSet) {
-	fs.StringVar(&uip.targetHost, "target-host", "google.com", "Hostname to be our end target.")
-	fs.IntVar(&uip.targetPort, "target-port", 80, "Port to query on our end target host.")
-	fs.IntVar(&uip.port, "port", 8000, "Port to bind to on this client.\nExample:\n    8000\n    1337")
+	fs.StringVar(&uip.TargetHost, "target-host", "google.com", "Hostname to be our end target.")
+	fs.IntVar(&uip.TargetPort, "target-port", 80, "Port to query on our end target host.")
+	fs.IntVar(&uip.Port, "port", 8000, "Port to bind to on this client.\nExample:\n    8000\n    1337")
 }
 
 type UserInputScanner struct {
-	host  string
-	ports string
+	Host  string
+	Ports string
 }
 
 func (uis *UserInputScanner) SetFlagScanner(fs *flag.FlagSet) {
-	fs.StringVar(&uis.host, "host", "127.0.0.1", "Hostname or IP we want to scan")
-	fs.StringVar(&uis.ports, "port", "0", "Port, or ports, to scan.\nExamples:\n    22\n    1-1000\n    22,443")
+	fs.StringVar(&uis.Host, "host", "127.0.0.1", "Hostname or IP we want to scan")
+	fs.StringVar(&uis.Ports, "port", "0", "Port, or ports, to scan.\nExamples:\n    22\n    1-1000\n    22,443")
 }
 
 type UserInputNetcat struct {
-	bind bool
-	port int
+	Bind bool
+	Port int
 }
 
 func (uin *UserInputNetcat) SetFlagNetcat(fs *flag.FlagSet) {
-	fs.BoolVar(&uin.bind, "bind", false, "Create a bind shell. This will bind to the specified port, opening access to anyone who connects.")
-	fs.IntVar(&uin.port, "port", 8000, "Bind to port on this host.")
+	fs.BoolVar(&uin.Bind, "bind", false, "Create a bind shell. This will bind to the specified port, opening access to anyone who connects.")
+	fs.IntVar(&uin.Port, "port", 8000, "Bind to port on this host.")
 }
 
 func ArgLengthCheck() {
@@ -100,7 +100,7 @@ func CommandCheck(command string) {
 		os.Exit(1)
 	}
 
-	if command == client || command == server || command == scanner || command == proxy || command == netcat {
+	if command == Client || command == Server || command == Scanner || command == Proxy || command == Netcat {
 		return
 	} else {
 		fmt.Println(exceptionStatement)
@@ -111,11 +111,11 @@ func CommandCheck(command string) {
 func UserCommands() map[string]string {
 	// Let the user choose between client, server, scanner, or proxy.
 	var (
-		clientFlag         = flag.NewFlagSet(client, flag.ExitOnError)
-		serverFlag         = flag.NewFlagSet(server, flag.ExitOnError)
-		proxyFlag          = flag.NewFlagSet(proxy, flag.ExitOnError)
-		scannerFlag        = flag.NewFlagSet(scanner, flag.ExitOnError)
-		netcatFlag         = flag.NewFlagSet(netcat, flag.ExitOnError)
+		clientFlag         = flag.NewFlagSet(Client, flag.ExitOnError)
+		serverFlag         = flag.NewFlagSet(Server, flag.ExitOnError)
+		proxyFlag          = flag.NewFlagSet(Proxy, flag.ExitOnError)
+		scannerFlag        = flag.NewFlagSet(Scanner, flag.ExitOnError)
+		netcatFlag         = flag.NewFlagSet(Netcat, flag.ExitOnError)
 		serverArgPort      = serverFlag.String("port", "8000", "Port to bind to on this server/client.\nExample:\n    8000\n    1337")
 		scannerArgHostname = scannerFlag.String("host", "127.0.0.1", "Hostname or IP we want to scan")
 		scannerArgPort     = scannerFlag.String("port", "0", "Port, or ports, to scan.\nExamples:\n    22\n    1-1000\n    22,443")
@@ -135,35 +135,35 @@ func UserCommands() map[string]string {
 
 	userInputMap := make(map[string]string)
 
-	if command == client || command == server || command == scanner || command == proxy || command == netcat {
+	if command == Client || command == Server || command == Scanner || command == Proxy || command == Netcat {
 		switch command {
 
-		case scanner:
+		case Scanner:
 			fmt.Println(userInputMap)
-			userInputMap["command"] = scanner
+			userInputMap["command"] = Scanner
 			scannerFlag.Parse(os.Args[2:])
 			userInputMap["host"] = *scannerArgHostname
 			userInputMap["ports"] = *scannerArgPort
 			fmt.Println(userInputMap)
 			return userInputMap
-		case client:
-			userInputMap["command"] = client
+		case Client:
+			userInputMap["command"] = Client
 			clientFlag.Parse(os.Args[2:])
 			return userInputMap
-		case server:
-			userInputMap["command"] = server
+		case Server:
+			userInputMap["command"] = Server
 			serverFlag.Parse(os.Args[2:])
 			userInputMap["port"] = *serverArgPort
 			return userInputMap
-		case proxy:
-			userInputMap["command"] = proxy
+		case Proxy:
+			userInputMap["command"] = Proxy
 			proxyFlag.Parse(os.Args[2:])
 			userInputMap["target-host"] = *proxyArgHost
 			userInputMap["port"] = *proxyArgPort
 			userInputMap["target-port"] = *proxyArgTargetPort
 			return userInputMap
-		case netcat:
-			userInputMap["command"] = netcat
+		case Netcat:
+			userInputMap["command"] = Netcat
 			netcatFlag.Parse(os.Args[2:])
 			userInputMap["port"] = *netcatArgPort
 			if *netcatBind {
@@ -200,3 +200,28 @@ func UserInputCheck() {
 		os.Exit(1)
 	}
 }
+
+// Originally main(), code cleanup resulted into structs, not maps.
+// Leaving this here to see how this is done with maps.
+// switch userInput["command"] {
+// case "Scanner":
+// 	log.Println("[*] Initiating scanner")
+// 	scannertools.InitScanner(userInput)
+// case "Server":
+// 	log.Println("[*] Initiating Server")
+// 	serverbind.BindServerPort(userInput)
+// case "Client":
+// 	log.Println("[*] Initiating Client")
+// 	log.Println("Client")
+// case "Proxy":
+// 	log.Println("[*] Initiating Proxy")
+// 	serverbind.ProxyForward(userInput)
+// case "Netcat":
+// 	if userInput["bind"] == "true" { // Garbage, need to convert to a struct to handle strings, bools, etc.
+// 		log.Println("[*] Binding shell spawning for remote code execution")
+// 		serverbind.NcBind(userInput)
+// 	}
+// default:
+// 	log.Fatalln("Subcommand does not exist")
+// 	os.Exit(1)
+// }

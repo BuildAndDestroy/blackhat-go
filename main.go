@@ -2,6 +2,7 @@ package main
 
 import (
 	"blackhat-go/scannertools"
+	"blackhat-go/serverbind"
 	"flag"
 	"fmt"
 	"log"
@@ -9,37 +10,40 @@ import (
 )
 
 func main() {
-	// userInput := scannertools.UserCommands()
-	// log.Println(userInput)
 	scannertools.ArgLengthCheck()
 	var command string = os.Args[1]
 	scannertools.CommandCheck(command)
 	var userCommand = flag.NewFlagSet(command, flag.ExitOnError)
+
 	switch command {
 	case "Scanner":
 		var scanner scannertools.UserInputScanner
 		scanner.SetFlagScanner(userCommand)
 		userCommand.Parse(os.Args[2:])
-		fmt.Println(scanner)
+		scanner.InitScannerTwo()
 	case "Server":
-		var server scannertools.UserInputServer
+		var server serverbind.ServerBindUserInputServer
 		server.SetFlagServer(userCommand)
 		userCommand.Parse(os.Args[2:])
-		fmt.Println(server)
+		server.BindServerPortTwo()
 	case "Client":
 		var client scannertools.UserInputClient
 		client.SetFlagClient(userCommand)
 		userCommand.Parse(os.Args[2:])
 		fmt.Println(client)
 	case "Proxy":
-		var proxy scannertools.UserInputProxy
+		var proxy serverbind.ServerBindUserInputProxy
 		proxy.SetFlagProxy(userCommand)
 		userCommand.Parse(os.Args[2:])
-		fmt.Println(proxy)
+		proxy.ProxyForwardTwo()
 	case "Netcat":
-		var netcat scannertools.UserInputNetcat
+		var netcat serverbind.ServerBindUserInputNetcat
 		netcat.SetFlagNetcat(userCommand)
 		userCommand.Parse(os.Args[2:])
+		if netcat.Bind {
+			log.Println("[*] Binding shell spawning for remote code execution")
+			netcat.NcBindTwo()
+		}
 		fmt.Println(netcat)
 	default:
 		log.Fatalln("Subcommand does not exist")

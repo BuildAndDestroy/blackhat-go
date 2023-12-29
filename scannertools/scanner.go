@@ -159,3 +159,8 @@ func InitScanner(mappedUserInput map[string]string) {
 	portsInt := StringToIntPorts(&userPorts)
 	WorkerPoolScanTwoPorts(&userHost, &portsInt)
 }
+
+func (uis *UserInputScanner) InitScannerTwo() {
+	portsInt := StringToIntPorts(&uis.Ports)
+	WorkerPoolScanTwoPorts(&uis.Host, &portsInt)
+}

