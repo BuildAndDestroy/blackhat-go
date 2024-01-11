@@ -1,8 +1,8 @@
 package main
 
 import (
-	"blackhat-go/scannertools"
-	"blackhat-go/serverbind"
+	"blackhat-go/backdoor/scannertools"
+	"blackhat-go/backdoor/serverbind"
 	"flag"
 	"fmt"
 	"log"

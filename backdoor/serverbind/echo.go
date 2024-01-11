@@ -1,7 +1,7 @@
 package serverbind
 
 import (
-	"blackhat-go/scannertools"
+	"blackhat-go/backdoor/scannertools"
 	"bufio"
 	"io"
 	"log"

