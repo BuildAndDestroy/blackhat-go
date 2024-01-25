@@ -34,18 +34,19 @@ func (s *Client) APIInfo() (*APIInfo, error) {
 func (s *Client) Credits() {
 	info, err := s.APIInfo()
 	if err != nil {
-		log.Panicln(err)
+		log.Fatalln(err)
 	}
 	fmt.Printf(
-		"Query Credits: %d\nScan Credits: %d\n\n",
+		"Query Credits: %d\nScan Credits: %d\nPlan: %s\n\n",
 		info.QueryCredits,
-		info.ScanCredits)
+		info.ScanCredits,
+		info.Plan)
 }
 
 func (s *Client) HostIpPortSearch() {
 	hostSearch, err := s.HostSearch(os.Args[1])
 	if err != nil {
-		log.Panicln(err)
+		log.Fatalln(err)
 	}
 	for _, host := range hostSearch.Matches {
 		fmt.Printf("%18s%8d\n", host.IPString, host.Port)
