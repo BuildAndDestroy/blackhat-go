@@ -39,11 +39,7 @@ func UserExecution() {
 		var netcat serverbind.ServerBindUserInputNetcat
 		netcat.SetFlagNetcat(userCommand)
 		userCommand.Parse(os.Args[2:])
-		if netcat.Bind {
-			log.Println("[*] Binding shell spawning for remote code execution")
-			netcat.NcBindTwo()
-		}
-		fmt.Println(netcat)
+		netcat.NcBindTwo()
 	default:
 		log.Fatalln("Subcommand does not exist")
 		os.Exit(1)

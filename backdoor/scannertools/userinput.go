@@ -76,13 +76,17 @@ func (uis *UserInputScanner) SetFlagScanner(fs *flag.FlagSet) {
 }
 
 type UserInputNetcat struct {
-	Bind bool
-	Port int
+	Bind    bool
+	Reverse bool
+	Port    int
+	Address string
 }
 
 func (uin *UserInputNetcat) SetFlagNetcat(fs *flag.FlagSet) {
 	fs.BoolVar(&uin.Bind, "bind", false, "Create a bind shell. This will bind to the specified port, opening access to anyone who connects.")
+	fs.BoolVar(&uin.Reverse, "reverse", false, "Reverse shell. Provide Attacker IP or hostname to call back to.")
 	fs.IntVar(&uin.Port, "port", 8000, "Bind to port on this host.")
+	fs.StringVar(&uin.Address, "address", "127.0.0.1", "If bind shell, we listen on localhost, if reverse shell, add the attacker IP or host.")
 }
 
 func ArgLengthCheck() {
