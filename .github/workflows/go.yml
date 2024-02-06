@@ -32,3 +32,6 @@ jobs:
 
     # - name: Test Shodan help menu
     #   run: httpRequests/cmd/shodan/shodan -h
+
+    - name: Build Metasploit
+      run: cd metasploit-minimal/client && CGO_ENABLED=0 go build -v
