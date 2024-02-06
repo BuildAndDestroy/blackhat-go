@@ -25,7 +25,7 @@ jobs:
       run: cd backdoor/cmd/ && CGO_ENABLED=0 go build -v
 
     - name: Test backdoor options
-      run: blackhat-go/backdoor/cmd -h
+      run: backdoor/cmd/cmd -h
 
     - name: Build Shodan
       run: cd httpRequests/cmd/shodan/ && CGO_ENABLED=0 go build -v
