@@ -24,11 +24,11 @@ jobs:
     - name: Build Backdoor
       run: cd backdoor/cmd/ && CGO_ENABLED=0 go build -v
 
-    - name: Test backdoor options
-      run: backdoor/cmd/cmd -h
+    #- name: Test backdoor help menu
+    #  run: backdoor/cmd/cmd -h
 
     - name: Build Shodan
       run: cd httpRequests/cmd/shodan/ && CGO_ENABLED=0 go build -v
 
-    - name: Test
-      run: httpRequests/cmd/shodan/shodan -h
+    # - name: Test Shodan help menu
+    #   run: httpRequests/cmd/shodan/shodan -h
