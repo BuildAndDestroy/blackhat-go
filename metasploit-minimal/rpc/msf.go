@@ -72,7 +72,7 @@ func (msf *Metasploit) Logout() error {
 func (msf *Metasploit) SessionList() (map[uint32]SessionListRes, error) {
 	req := &SessionListReq{Method: "session.list", Token: msf.token}
 	res := make(map[uint32]SessionListRes)
-	if err := msf.Send(req, &res); if err != nil {
+	if err := msf.Send(req, &res); err != nil {
 		return nil, err
 	}
 
