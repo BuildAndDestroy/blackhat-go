@@ -7,11 +7,13 @@ import (
 	"os"
 )
 
-func main() {
-	host := os.Getenv("MSFHOST")
-	pass := os.Getenv("MSFPASS")
-	user := "msf"
-
+func ActiveSessions() {
+	// Request active sessions in Metasploit
+	var (
+		host string = os.Getenv("MSFHOST")
+		pass string = os.Getenv("MSFPASS")
+		user string = "msf"
+	)
 	if host == "" || pass == "" {
 		log.Fatalln("Missing required environment variable MSFHOST or MSFPASS")
 	}
@@ -33,4 +35,10 @@ func main() {
 	for _, session := range sessions {
 		fmt.Printf("%5d %s\n", session.ID, session.Info)
 	}
+
+}
+
+func main() {
+	// Init the metasploit program
+	ActiveSessions()
 }

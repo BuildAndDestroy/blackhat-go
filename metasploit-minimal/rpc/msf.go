@@ -9,6 +9,7 @@ import (
 )
 
 type Metasploit struct {
+	// Metasploit struct
 	host  string
 	user  string
 	pass  string
@@ -16,6 +17,7 @@ type Metasploit struct {
 }
 
 func NewMetasploit(host, user, pass string) (*Metasploit, error) {
+	// Constructor for Metasploit struct
 	msf := &Metasploit{
 		host: host,
 		user: user,
@@ -30,6 +32,7 @@ func NewMetasploit(host, user, pass string) (*Metasploit, error) {
 }
 
 func (msf *Metasploit) Send(req interface{}, res interface{}) error {
+	// Send message-pack encoded data to Metasploit
 	buf := new(bytes.Buffer)
 	msgpack.NewEncoder(buf).Encode(req)
 	dest := fmt.Sprintf("http://%s/api", msf.host)
@@ -46,6 +49,7 @@ func (msf *Metasploit) Send(req interface{}, res interface{}) error {
 }
 
 func (msf *Metasploit) Login() error {
+	// Login to the Metasploit server
 	ctx := &LoginReq{
 		Method:   "auth.login",
 		Username: msf.user,
@@ -60,6 +64,7 @@ func (msf *Metasploit) Login() error {
 }
 
 func (msf *Metasploit) Logout() error {
+	// Logout of the Metasploit server
 	ctx := &LogoutReq{
 		Method:      "auth.logout",
 		Token:       msf.token,
@@ -74,6 +79,7 @@ func (msf *Metasploit) Logout() error {
 }
 
 func (msf *Metasploit) SessionList() (map[uint32]SessionListRes, error) {
+	// Logic to map out active Metasploit sessions on compromised machines
 	req := &SessionListReq{Method: "session.list", Token: msf.token}
 	res := make(map[uint32]SessionListRes)
 	if err := msf.Send(req, &res); err != nil {
