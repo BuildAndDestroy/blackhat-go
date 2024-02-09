@@ -1,4 +1,4 @@
-package main
+package bing
 
 import (
 	"archive/zip"
@@ -14,7 +14,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func handler(i int, s *goquery.Selection) {
+func Handler(i int, s *goquery.Selection) {
 	url, ok := s.Find("a").Attr("href")
 	if !ok {
 		return
@@ -49,7 +49,7 @@ func handler(i int, s *goquery.Selection) {
 		ap.GetMajorVersion())
 }
 
-func main() {
+func BingSearch() {
 	if len(os.Args) != 3 {
 		log.Fatalln("Missing required argument. Usage: main.go domain ext")
 	}
@@ -78,5 +78,5 @@ func main() {
 	}
 
 	s := "html body div#b_content ol#b_results li.b_algo div.b_title h2"
-	doc.Find(s).Each(handler)
+	doc.Find(s).Each(Handler)
 }
