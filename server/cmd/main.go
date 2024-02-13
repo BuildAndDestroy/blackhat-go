@@ -16,10 +16,17 @@ func TestFunctions() {
 	// lib.GetFooHost(r)
 	// lib.GetFoo(r)
 	// lib.GetFooUser(r)
-	lib.GetFooUserRegex(r)
+	// lib.GetFooUserRegex(r)
 	http.ListenAndServe(":8000", r)
 }
 
+func TestNegroniFunctions() {
+	r := mux.NewRouter()
+	// lib.SimpleNegroni(r)
+	lib.NegroniAuthExample(r)
+}
+
 func main() {
-	TestFunctions()
+	// TestFunctions()
+	TestNegroniFunctions()
 }
