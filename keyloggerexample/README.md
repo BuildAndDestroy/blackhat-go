@@ -39,7 +39,6 @@ $ tree
 FROM   <form name="form" method="post" action="http://127.0.0.1/?_task=login">
 TO     <form name="form" method="post" action="/login">
 ```
-I have already done this for you, just keep this in mind when you create/mirror your own landing pages.
 
 ## Send it
 
