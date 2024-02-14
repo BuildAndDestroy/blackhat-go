@@ -1,4 +1,4 @@
-# Keylogger example
+# Harvester example
 
 Chapter 4 goes over an example of phishing web credentials. In this case, Roundcube.
 
@@ -51,9 +51,4 @@ go build -o keyloggertest && ./keyloggertest
 ```
 
 A "credentials.txt" file will be created and store our creds and client information.
-
-## Note
-
-This isn't exactly a keylogger, seems to be more of a phishing page. Still, the concepts
-will help us get what we need.
 
