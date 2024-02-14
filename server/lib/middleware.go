@@ -70,6 +70,15 @@ func SimpleNegroni(r *mux.Router) {
 	http.ListenAndServe(":8000", n)
 }
 
+type hardCodedCreds struct {
+	Username string
+	Password string
+}
+
+func (h *hardCodedCreds) HardCodedCredsDontDoThis() {
+	h.Username = "admin"
+}
+
 type badAuth struct {
 	Username string
 	Password string
@@ -79,10 +88,14 @@ func (b *badAuth) ServeHTTP(w http.ResponseWriter, r *http.Request, next http.Ha
 	username := r.URL.Query().Get("username")
 	password := r.URL.Query().Get("password")
 	if username != b.Username || password != b.Password {
-		http.Error(w, "Unauthorized", 401)
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-	ctx := context.WithValue(r.Context(), "username", username)
+
+	type contextKey string
+	const usernameKey contextKey = "username"
+
+	ctx := context.WithValue(r.Context(), usernameKey, username)
 	r = r.WithContext(ctx)
 	next(w, r)
 }

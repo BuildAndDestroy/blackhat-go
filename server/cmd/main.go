@@ -28,5 +28,6 @@ func TestNegroniFunctions() {
 
 func main() {
 	// TestFunctions()
-	TestNegroniFunctions()
+	// TestNegroniFunctions()
+	lib.CallHelloHTMLPage()
 }
