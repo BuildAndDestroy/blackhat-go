@@ -1,7 +1,7 @@
 package main
 
 import (
-	"blackhat-go/scraper/bing"
+	"github.com/BuildAndDestroy/blackhat-go/scraper/bing"
 )
 
 func main() {

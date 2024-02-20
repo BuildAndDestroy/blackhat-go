@@ -1,4 +1,4 @@
-module blackhat-go
+module github.com/BuildAndDestroy/blackhat-go
 
 go 1.21.1
 

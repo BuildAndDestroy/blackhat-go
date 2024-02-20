@@ -1,10 +1,11 @@
 package main
 
 import (
-	"blackhat-go/metasploit-minimal/rpc"
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/BuildAndDestroy/blackhat-go/metasploit-minimal/rpc"
 )
 
 func ActiveSessions() {

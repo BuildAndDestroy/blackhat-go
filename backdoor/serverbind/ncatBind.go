@@ -1,7 +1,6 @@
 package serverbind
 
 import (
-	"blackhat-go/backdoor/scannertools"
 	"bufio"
 	"fmt"
 	"io"
@@ -10,6 +9,8 @@ import (
 	"os/exec"
 	"runtime"
 	"time"
+
+	"github.com/BuildAndDestroy/blackhat-go/backdoor/scannertools"
 )
 
 func OperatingSystemDetect() *string {

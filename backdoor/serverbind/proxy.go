@@ -1,12 +1,13 @@
 package serverbind
 
 import (
-	"blackhat-go/backdoor/scannertools"
 	"fmt"
 	"io"
 	"log"
 	"net"
 	"strconv"
+
+	"github.com/BuildAndDestroy/blackhat-go/backdoor/scannertools"
 )
 
 func handle(src net.Conn, host string, port int) {

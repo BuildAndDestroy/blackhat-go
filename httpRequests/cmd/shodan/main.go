@@ -1,9 +1,10 @@
 package main
 
 import (
-	"blackhat-go/httpRequests/shodan"
 	"flag"
 	"os"
+
+	"github.com/BuildAndDestroy/blackhat-go/httpRequests/shodan"
 )
 
 func main() {

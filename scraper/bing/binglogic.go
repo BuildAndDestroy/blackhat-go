@@ -2,7 +2,6 @@ package bing
 
 import (
 	"archive/zip"
-	"blackhat-go/scraper/metadata"
 	"bytes"
 	"fmt"
 	"io"
@@ -10,6 +9,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+
+	"github.com/BuildAndDestroy/blackhat-go/scraper/metadata"
 
 	"github.com/PuerkitoBio/goquery"
 )

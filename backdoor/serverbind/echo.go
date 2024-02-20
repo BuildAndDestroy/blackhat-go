@@ -1,12 +1,13 @@
 package serverbind
 
 import (
-	"blackhat-go/backdoor/scannertools"
 	"bufio"
 	"io"
 	"log"
 	"net"
 	"strconv"
+
+	"github.com/BuildAndDestroy/blackhat-go/backdoor/scannertools"
 )
 
 func copyEcho(conn net.Conn) {

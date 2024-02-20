@@ -1,12 +1,13 @@
 package main
 
 import (
-	"blackhat-go/backdoor/scannertools"
-	"blackhat-go/backdoor/serverbind"
 	"flag"
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/BuildAndDestroy/blackhat-go/backdoor/scannertools"
+	"github.com/BuildAndDestroy/blackhat-go/backdoor/serverbind"
 )
 
 func UserExecution() {

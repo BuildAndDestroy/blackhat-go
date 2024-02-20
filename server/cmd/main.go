@@ -1,8 +1,9 @@
 package main
 
 import (
-	"blackhat-go/server/lib"
 	"net/http"
+
+	"github.com/BuildAndDestroy/blackhat-go/server/lib"
 
 	"github.com/gorilla/mux"
 )
