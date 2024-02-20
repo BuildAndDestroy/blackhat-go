@@ -35,3 +35,12 @@ jobs:
 
     - name: Build Metasploit
       run: cd metasploit-minimal/client && CGO_ENABLED=0 go build -v
+
+    - name: Build Credential Harvester
+      run: cd credentialharvest/ && CGO_ENABLED=0 go build -v
+
+    - name: Build Bing dork Scraper
+      run: cd scraper/bing/cmd && CGO_ENABLED=0 go build -v
+
+    - name: Build Go Server Template 
+      run: cd server/cmd && CGO_ENABLED=0 go build -v
