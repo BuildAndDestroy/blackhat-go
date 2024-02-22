@@ -44,3 +44,6 @@ jobs:
 
     - name: Build Go Server Template 
       run: cd server/cmd && CGO_ENABLED=0 go build -v
+
+    - name: Build Keylogger example
+      run: cd keylogger/cmd && CGO_ENABLED=0 go build -v
