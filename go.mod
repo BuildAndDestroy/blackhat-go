@@ -1,6 +1,6 @@
 module github.com/BuildAndDestroy/blackhat-go
 
-go 1.21.1
+go 1.18.1
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.1
