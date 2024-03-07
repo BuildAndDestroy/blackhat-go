@@ -27,11 +27,11 @@ jobs:
     #- name: Test backdoor help menu
     #  run: backdoor/cmd/cmd -h
 
+    - name: Build backdoor
+      run: cd backdoor/cmd && CGO_ENABLED=0 go build -v
+
     - name: Build Shodan
       run: cd httpRequests/cmd/shodan/ && CGO_ENABLED=0 go build -v
-
-    # - name: Test Shodan help menu
-    #   run: httpRequests/cmd/shodan/shodan -h
 
     - name: Build Metasploit
       run: cd metasploit-minimal/client && CGO_ENABLED=0 go build -v
@@ -42,8 +42,11 @@ jobs:
     - name: Build Bing dork Scraper
       run: cd scraper/bing/cmd && CGO_ENABLED=0 go build -v
 
-    - name: Build Go Server Template 
+    - name: Build Server Template 
       run: cd server/cmd && CGO_ENABLED=0 go build -v
 
-    - name: Build Keylogger example
+    - name: Build Keylogger
       run: cd keylogger/cmd && CGO_ENABLED=0 go build -v
+
+    - name: Build Scraper
+      run: cd scraper/bing/cmd && CGO_ENABLED=0 go build -v
