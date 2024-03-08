@@ -50,3 +50,6 @@ jobs:
 
     - name: Build Scraper
       run: cd scraper/bing/cmd && CGO_ENABLED=0 go build -v
+
+    - name: Build multiplexer
+      run: cd multiplexing-command-control/cmd && CGO_ENABLED=0 go build -v
