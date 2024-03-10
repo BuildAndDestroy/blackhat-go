@@ -2,8 +2,10 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"log"
+	"net"
 	"os"
 	"unicode/utf8"
 )
@@ -127,14 +129,44 @@ func CheckForBinary(fileInputName string) {
 
 	if isBinary {
 		log.Println("The file is binary.")
-		WriteBinaryFile(fileInputName)
+		// WriteBinaryFile(fileInputName)
+
 	} else {
 		log.Println("The file is plain text.")
-		WriteTextFiles(fileInputName)
+		// WriteTextFiles(fileInputName)
+
 	}
 }
 
+func SendFile(fileInputName string) {
+	// Open the input file
+	inputFile, err := os.Open(fileInputName)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	defer inputFile.Close()
+
+	// Connect to the TCP server
+	conn, err := net.Dial("tcp", "localhost:8080")
+	if err != nil {
+		fmt.Println("Error connecting to server:", err)
+		return
+	}
+	defer conn.Close()
+
+	// Copy the file content to the TCP connection
+	_, err = io.Copy(conn, inputFile)
+	if err != nil {
+		fmt.Println("Error sending file:", err)
+		return
+	}
+
+	fmt.Println("File sent successfully!")
+}
+
 func main() {
-	CheckForBinary("somefile.pdf")
-	CheckForBinary("test.txt")
+	SendFile("test.txt")
+	// CheckForBinary("somefile.pdf")
+	// CheckForBinary("test.txt")
 }
